@@ -16,6 +16,15 @@ app.get("/task", async (req: Request, res: Response) => {
     res.json(tasks);
 });
 
+app.get("/task/detail/:id", async (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    const task = await Task.findOne({
+        _id: id,
+        deleted: false
+    })
+    res.json(task);
+});
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
