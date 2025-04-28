@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from "dotenv";
 import * as database from "./config/database";
-import mainV1Routes from './api/v1/index.route';
+import mainV1Routes from './api/v1/routes/index.route';
 
 dotenv.config();
 database.connect();
