@@ -1,15 +1,29 @@
 import { Request, Response } from 'express';
 import Task from "../models/task.model";
 import paginationHelper from "../../../helper/pagination";
+import searchHelper from '../../../helper/search';
 export const index = async (req: Request, res: Response) => {
     // find 
-    const find = {
+    interface Find{
+        deleted: boolean,
+        status?: string,
+        title?: RegExp,
+
+    }
+    const find:Find = {
         deleted: false
     };
     if (req.query.status) {
-        find["status"] = req.query.status
+        find.status = req.query.status.toString();
     }
     // End find
+
+    // Search
+    const objectSearch = searchHelper(req.query);
+    if (objectSearch.regex) {
+        find.title = objectSearch.regex
+    }
+    // End Search
 
     // sort
     const sort = {}
@@ -46,3 +60,4 @@ export const detail = async (req: Request, res: Response) => {
     })
     res.json(task);
 }
+
