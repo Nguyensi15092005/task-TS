@@ -2,15 +2,16 @@ import { Request, Response } from 'express';
 import Task from "../models/task.model";
 import paginationHelper from "../../../helper/pagination";
 import searchHelper from '../../../helper/search';
+
 export const index = async (req: Request, res: Response) => {
     // find 
-    interface Find{
+    interface Find {
         deleted: boolean,
         status?: string,
         title?: RegExp,
 
     }
-    const find:Find = {
+    const find: Find = {
         deleted: false
     };
     if (req.query.status) {
@@ -52,6 +53,7 @@ export const index = async (req: Request, res: Response) => {
     res.json(tasks);
 }
 
+// [GET] api/v1/task/detai/:id
 export const detail = async (req: Request, res: Response) => {
     const id: string = req.params.id;
     const task = await Task.findOne({
@@ -61,3 +63,23 @@ export const detail = async (req: Request, res: Response) => {
     res.json(task);
 }
 
+// [PATCH] api/v1/task/change-status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const id:string = req.params.id;
+        const status:string = req.body.status;
+
+        await Task.updateOne({ _id: id }, { status: status });
+
+        res.json({
+            message: "Cập nhật trạng thái thành công!",
+            code: 200
+        });
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không tồn tại!"
+        });
+    }
+
+}
