@@ -66,8 +66,8 @@ export const detail = async (req: Request, res: Response) => {
 // [PATCH] api/v1/task/change-status/:id
 export const changeStatus = async (req: Request, res: Response) => {
     try {
-        const id:string = req.params.id;
-        const status:string = req.body.status;
+        const id: string = req.params.id;
+        const status: string = req.body.status;
 
         await Task.updateOne({ _id: id }, { status: status });
 
@@ -82,4 +82,51 @@ export const changeStatus = async (req: Request, res: Response) => {
         });
     }
 
+}
+
+// [PATCH] task/change-multi
+export const changeMulti = async (req: Request, res: Response) => {
+    try {
+        enum Key {
+            status="status",
+            delete="delete",
+        }
+        const ids: string[] = req.body.ids;
+        const key: string = req.body.key;
+        const value: string = req.body.value;
+
+       
+        switch (key) {
+            case Key.status:
+                await Task.updateMany({ _id: { $in: ids } }, { status: value });
+                res.json({
+                    code: 200,
+                    message: "Cập nhật trạng thái thành công!"
+                });
+                break;
+
+            case Key.delete:
+                await Task.updateMany({ _id: { $in: ids } }, {
+                    deleted: true,
+                    deletedAt: new Date()
+                });
+                res.json({
+                    code: 200,
+                    message: "Xoá thành công!"
+                });
+                break;
+
+            default:
+                res.json({
+                    code: 400,
+                    message: "Không tồn tại!"
+                });
+                break;
+        }
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không tồn tại!"
+        });
+    }
 }
