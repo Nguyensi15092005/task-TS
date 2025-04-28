@@ -1,12 +1,13 @@
 import { Router } from 'express';
-import * as contronller from "../controller/task.controller";
+import * as controller from "../controller/task.controller";
 const router: Router = Router();
 
 
 
-router.get("/", contronller.index)
+router.get("/", controller.index)
 
-router.get("/detail/:id", contronller.detail);
+router.get("/detail/:id", controller.detail);
+
 
 
 export default router;
