@@ -130,3 +130,20 @@ export const changeMulti = async (req: Request, res: Response) => {
         });
     }
 }
+
+// [GET] task/create
+export const create = async (req: Request, res: Response) =>{
+    try {
+        const task = new Task(req.body);
+        await task.save();
+        res.json({
+            code: 200,
+            message: "Tạo thành công"
+        })
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Lỗi!!"
+        })
+    }
+}
