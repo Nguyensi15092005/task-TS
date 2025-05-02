@@ -89,16 +89,10 @@ export const login = async (req: Request, res: Response) =>{
 // [GET] api/v1/users/detail/:id
 export const detail = async (req: Request, res:Response) =>{
     try {
-        const id: string = req.params.id;
-        
-        const user = await User.findOne({
-            _id:id,
-            deleted: false
-        }).select("-password -token")
         res.json({
             code: 200,
             message: "Thanh công",
-            info: user
+            info: req["user"]
         })
     } catch (error) {
         res.json({
